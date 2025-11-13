@@ -57,14 +57,7 @@ class Usuario{
                                 array(":ID"=>$id));
 
         if(count($result) > 0 ){
-
-                $row = $result[0];
-
-                $this->setIdusuario($row['idusuario']);
-                $this->setDeslogin($row['deslogin']);
-                $this->setDessenha($row['dessenha']);
-                $this->setDtcadastro(new DateTime($row['dtcadastro']));
-
+            $this->setData($result[0]);
         }
         
     }
@@ -72,14 +65,7 @@ class Usuario{
     // Quando for solicitado a classe GET, ira retornar um ARRAY...
     // formatado em json, usando a funcao json_encode.
 
-    public function __toString(){
-        return json_encode(array(
-            "idusuario"=>$this->getIdusuario(),
-            "deslogin"=>$this->getDeslogin(),
-            "dessenha"=>$this->getDessenha(),
-            "dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
-        ));
-    }
+
     
     // Retorna uma lista de usuarios
 
@@ -116,12 +102,7 @@ class Usuario{
 
         if(count($result) > 0 ){
 
-                $row = $result[0];
-
-                $this->setIdusuario($row['idusuario']);
-                $this->setDeslogin($row['deslogin']);
-                $this->setDessenha($row['dessenha']);
-                $this->setDtcadastro(new DateTime($row['dtcadastro']));
+                $this->setData($result[0]);
 
         }else{
 
@@ -129,9 +110,72 @@ class Usuario{
 
         }
 
+    }
+    
+    public function setData($data){
+
+        $this->setIdusuario($data['idusuario']);
+        $this->setDeslogin($data['deslogin']);
+        $this->setDessenha($data['dessenha']);
+        $this->setDtcadastro(new DateTime($data['dtcadastro']));
 
     }
     
 
 
+    public function insert(){
+
+        $sql = new Sql();
+
+        $results = $sql->select("CALL sp_usuarios_insert(:LOGIN, :PASSWORD)", array(
+            ':LOGIN'=>$this->getDeslogin(),
+            'PASSWORD'=>$this->getDessenha()
+        ));
+        
+        if(count($results) > 0 ){
+            $this->setData($results[0]);
+        }
+    }
+
+    public function update($login, $password){
+
+        $this->setDeslogin($login);
+        $this->setDessenha($password);
+
+        $sql = new Sql();
+
+        $sql->execQuery("UPDATE tb_usuarios SET 
+                        deslogin = :LOGIN, 
+                        dessenha = :PASSWORD
+                        WHERE idusuario = :ID", array(
+                        ':LOGIN'=>$this->getDeslogin(),
+                        ':PASSWORD'=>$this->getDessenha(),
+                        ':ID'=>$this->getIdusuario()
+                        ));
+    }
+
+
+
+
+
+    
+
+
+    // Os parametros passados no momento inicial do instaciamento da classe
+    // new Usuario(), são usados nesta função __contruct.
+
+
+    public function __construct($login = "", $password= ""){
+        $this->setDeslogin($login);
+        $this->setDessenha($password);
+    }
+
+    public function __toString(){
+        return json_encode(array(
+            "idusuario"=>$this->getIdusuario(),
+            "deslogin"=>$this->getDeslogin(),
+            "dessenha"=>$this->getDessenha(),
+            "dtcadastro"=>$this->getDtcadastro()->format("d/m/Y H:i:s")
+        ));
+    }
 }

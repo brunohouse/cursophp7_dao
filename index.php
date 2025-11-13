@@ -24,11 +24,25 @@ require_once("config.php");
 // Retorna um usuario, porem, somente se o LOGIN e a PASSWORD passados como...
 // parametro forem corretos, se não, retornao uma mensagem de erro no login
 
-$login = new Usuario();
-$login->login("brunddo","senhateste");
-echo $login;
+// $login = new Usuario();
+// $login->login("brunddo","senhateste");
+// echo $login;
 
-// TESTE TESTE TESTE
+
+
+// $aluno = Usuario::search("aluno55");
+// echo json_encode($aluno);
+
+
+$professor = new Usuario();
+
+$professor->loadById(14);
+
+$professor->update("professorfoda","testeprofessor");
+
+echo $professor;
+
+
 
 
 ?>
