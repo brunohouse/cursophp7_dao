@@ -34,13 +34,18 @@ require_once("config.php");
 // echo json_encode($aluno);
 
 
-$professor = new Usuario();
+// Alterando um usuario
 
-$professor->loadById(14);
+// $professor = new Usuario();
+// $professor->loadById(14);
+// $professor->update("professorfoda","testeprofessor");
+// echo $professor;
 
-$professor->update("professorfoda","testeprofessor");
 
-echo $professor;
+$usuario = new Usuario();
+
+$usuario->delete(6);
+
 
 
 

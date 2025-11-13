@@ -137,6 +137,10 @@ class Usuario{
         }
     }
 
+    // Função UPDATE(), primeiramente um usuario deve ser carregado, apos isso
+    // a classe UPDATE() recebe dois parametros LOGIN e SENHA, e são esses
+    // dois que serão alterados no usuario que foi carregado
+
     public function update($login, $password){
 
         $this->setDeslogin($login);
@@ -154,7 +158,19 @@ class Usuario{
                         ));
     }
 
+    public function delete(){
 
+        $sql = new Sql();
+
+        $sql->execQuery("DELETE FROM tb_usuarios WHERE idusuario = :ID",
+            array(':ID'=>$this->getDeslogin()));
+
+        $this->setIdusuario(0);
+        $this->setDeslogin("");
+        $this->setDessenha("");
+        $this->setDtcadastro(new DateTime());
+
+    }
 
 
 
