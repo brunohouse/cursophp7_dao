@@ -1,6 +1,6 @@
 <?php
 
-class sql extends PDO{
+class Sql extends PDO{
 
     private $conn;
 
@@ -23,7 +23,9 @@ class sql extends PDO{
         $statment->bindParam($key, $value);
     }
 
-
+    // Funcao execQuery() prepara a variavel $smtm com todos os...
+    // parametros e executa dentro do banco de dados, atraves...
+    // da funcao execute()
 
     public function execQuery($rawQuery, $params = array()){
         $stmt = $this->conn->prepare($rawQuery);
@@ -38,7 +40,7 @@ class sql extends PDO{
 
     public function select($rawQuery, $params = array()):array{
         $stmt = $this->execQuery($rawQuery, $params);  
-        return $stmt->fetchAll(PDO::FETCH_ASSOC);    
+        return $stmt->fetchAll(PDO::FETCH_ASSOC); //retorna o array formatado   
     }
 
 }
